@@ -11,9 +11,10 @@
             color="blue-grey-10"
             type="email"
             label="E-mail"
-            :error-message="msgErr"
-            @blur="$v.usuario.email.$touch(), mensagemErro()"
-            :error="$v.usuario.email.$error"
+            :error-message="mensagemErro('email')"
+            :error="$v.usuario.email.$invalid"
+            counter
+            maxlength="30"
             />
             <q-input
             v-model="usuario.senha"
@@ -21,15 +22,18 @@
             color="blue-grey-10"
             type="password"
             label="Senha"
-            @blur="$v.usuario.senha.$touch()"
-            :error-message="$v.usuario.senha.required ? '' : 'Campo Obrigatorio'"
-            :error="$v.usuario.senha.$error"
+            :error-message="mensagemErro('senha')"
+            :error="$v.usuario.senha.$invalid"
+            counter
+            maxlength="10"
+            @keyup.enter="entrar()"
             />
             <q-btn
             class="q-mt-md full-width"
-            color="blue-grey-10"
+            :color="$v.usuario.$invalid ? 'grey' : 'blue-grey-10'"
             label="Entrar"
             @click="entrar()"
+            :disable="$v.usuario.$invalid"
             />
           </q-card-section>
         </q-card>
@@ -38,12 +42,11 @@
 </template>
 
 <script>
-import { required, maxLength, email } from 'vuelidate/lib/validators'
+import { required, maxLength, email, minLength } from 'vuelidate/lib/validators'
 export default {
   name: 'Formulario',
   data () {
     return {
-      msgErr: '',
       usuario: {
         email: '',
         senha: ''
@@ -53,27 +56,32 @@ export default {
   validations: {
     usuario: {
       email: { required, email, maxLength: maxLength(30) },
-      senha: { required }
+      senha: { required, minLength: minLength(4), maxLength: maxLength(10) }
     }
   },
   methods: {
-    mensagemErro () {
-      this.$v.usuario.email.$touch()
-      if (!this.$v.usuario.email.email) {
-        this.msgErr = 'Deve ser um E-mail'
+    mensagemErro (campo) {
+      if (campo === 'email') {
+        if (!this.$v.usuario.email.email) return 'Deve ser um E-mail'
+        if (!this.$v.usuario.email.required) return 'Campo Obrigatório'
+        if (!this.$v.usuario.email.maxLength) return 'Tamanho maximo de 30 caracteres'
       }
-      if (!this.$v.usuario.email.required) {
-        this.msgErr = 'Campo Obrigatório'
-      }
-      if (!this.$v.usuario.email.maxLength) {
-        this.msgErr = 'Tamanho maximo de 30 caracteres'
+      if (campo === 'senha') {
+        if (!this.$v.usuario.senha.minLength) return 'Tamanho mínimo de 4 caracteres'
+        if (!this.$v.usuario.senha.required) return 'Campo Obrigatório'
+        if (!this.$v.usuario.senha.maxLength) return 'Tamanho máximo de 10 caracteres'
       }
     },
     entrar () {
       this.$v.$touch()
       if (!this.$v.$invalid) {
-        alert('Tudo certo!!')
+        localStorage.setItem('email', this.usuario.email)
+        localStorage.setItem('senha', this.usuario.senha)
+        this.$router.push({ path: '/index' })
       }
+    },
+    mostrar () {
+      console.log(this.idade)
     }
   }
 }
