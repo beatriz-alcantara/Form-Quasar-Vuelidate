@@ -46,7 +46,8 @@ module.exports = function (ctx) {
       components: [
         'QCard',
         'QCardSection',
-        'QSelect'
+        'QImg',
+        'QAvatar'
       ],
       directives: [],
 

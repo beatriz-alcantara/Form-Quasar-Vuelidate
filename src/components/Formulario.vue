@@ -79,9 +79,6 @@ export default {
         localStorage.setItem('senha', this.usuario.senha)
         this.$router.push({ path: '/index' })
       }
-    },
-    mostrar () {
-      console.log(this.idade)
     }
   }
 }

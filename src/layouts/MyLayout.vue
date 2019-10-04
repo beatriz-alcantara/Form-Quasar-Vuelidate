@@ -29,7 +29,9 @@
         <q-item-label header>Essential Links</q-item-label>
         <q-item clickable tag="a" target="_blank" href="https://github.com/Beatriz813/formulario-com-quasar-vuelidate">
           <q-item-section avatar>
-            <q-icon name="code" />
+            <q-avatar>
+              <q-img src="https://avatars2.githubusercontent.com/u/48103865?s=460&v=4"/>
+            </q-avatar>
           </q-item-section>
           <q-item-section>
             <q-item-label>Github</q-item-label>
