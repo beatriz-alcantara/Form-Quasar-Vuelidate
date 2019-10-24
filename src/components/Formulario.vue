@@ -61,6 +61,7 @@ export default {
   },
   methods: {
     mensagemErro (campo) {
+	  console.log('campo', campo)
       if (campo === 'email') {
         if (!this.$v.usuario.email.email) return 'Deve ser um E-mail'
         if (!this.$v.usuario.email.required) return 'Campo Obrigatório'
